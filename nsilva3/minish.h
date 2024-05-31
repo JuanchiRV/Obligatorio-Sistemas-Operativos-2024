@@ -24,6 +24,7 @@
 extern int globalstatret;   // guarda status del ultimo comando - deberá definirse en el main
 extern char cwd[MAXCWD];    // almacena el current working directorys
 
+
 // Funciones
 extern int builtin_alias (int argc, char ** argv);
 extern int builtin_copiar (int argc, char ** argv);
