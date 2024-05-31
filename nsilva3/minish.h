@@ -22,7 +22,7 @@
 */
 // Variables que deberán definirse en el main o en otro archivo fuente
 extern int globalstatret;   // guarda status del ultimo comando - deberá definirse en el main
-extern char cwd[MAXCWD];    // almacena el current working directory
+extern char cwd[MAXCWD];    // almacena el current working directorys
 
 // Funciones
 extern int builtin_alias (int argc, char ** argv);
