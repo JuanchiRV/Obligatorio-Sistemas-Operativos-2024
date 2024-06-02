@@ -46,6 +46,9 @@ extern int ejecutar (int argc, char ** argv);
 extern int externo (int argc, char ** argv);
 extern int linea2argv(char *linea, int argc, char **argv);
 
+//funcion agregada por nosotros 
+extern struct builtin_struct * builtin_lookup(char *cmd);//extiende esta funcion para que pueda ser usada en otros archivos
+
 struct builtin_struct {         // struct con información de los builtins
     char *cmd;                  // nombre del comando builtin
     int (*func) (int, char **); // la función que lo ejecuta

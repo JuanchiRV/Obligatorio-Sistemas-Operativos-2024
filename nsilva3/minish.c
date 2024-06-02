@@ -39,3 +39,5 @@ struct builtin_struct builtin_arr[] = {
     { "uid", builtin_uid, HELP_UID },
     { NULL, NULL, NULL } 
 };  
+
+int globalstatret;//para builtin_status
