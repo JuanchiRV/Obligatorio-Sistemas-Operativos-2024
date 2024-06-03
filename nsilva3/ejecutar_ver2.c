@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "minish.h"
 
-/*int ejecutar(int argc, char **argv) {//
+int ejecutar(int argc, char **argv) {//
     struct builtin_struct *builtin;
     int status;
     int isInternal = 0;
@@ -16,5 +16,5 @@
     }
     status = isInternal ? builtin->func(argc, argv) : externo(argc, argv);
     return status
-}/*/
+}
     
