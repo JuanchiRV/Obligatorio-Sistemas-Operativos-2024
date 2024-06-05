@@ -9,7 +9,10 @@ Devuelve el status devuelto por externo o la función del builtin.
 int
 ejecutar(int argc, char **argv)
 {
-    
+    if(argc == 0)//si no hay argumentos, no se hace nada
+    {    
+        return 0;//retorna 0 (no se ejecuto nada)
+    }
     struct builtin_struct *builtin;
     builtin = builtin_lookup(argv[0]);//argv[0] busca en el array argv la 
     int status;//variable que guarda el status del comando
