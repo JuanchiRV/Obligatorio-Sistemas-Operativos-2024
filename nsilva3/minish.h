@@ -27,7 +27,6 @@ extern char cwd[MAXCWD];    // almacena el current working directorys
 
 // Funciones
 extern int builtin_alias (int argc, char ** argv);
-extern int builtin_copiar (int argc, char ** argv);
 extern int builtin_basedirname (int argc, char **argv);
 extern int builtin_exit (int argc, char ** argv);
 extern int builtin_help (int argc, char ** argv);

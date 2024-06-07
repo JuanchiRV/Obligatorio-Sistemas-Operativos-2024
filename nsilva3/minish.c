@@ -25,7 +25,6 @@
 
 struct builtin_struct builtin_arr[] = {
     { "cd", builtin_cd, HELP_CD },
-    { "copiar", builtin_copiar, HELP_COPIAR },
     { "status", builtin_status, HELP_STATUS},
     { "help", builtin_help, HELP_HELP},
     { "exit", builtin_exit, HELP_EXIT},
