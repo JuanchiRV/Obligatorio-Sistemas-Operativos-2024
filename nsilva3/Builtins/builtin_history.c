@@ -4,90 +4,69 @@
 #include "../minish.h"
 #include "../wrappers.h"
 
-// Inicializa el historial desde un archivo
-struct hist_st *history_init(FILE *fp)
+struct hist_st *history_inicializar(FILE *fp) // Inicializa la estructura de historial
 {
-    // Asigna memoria para la estructura de historial y verifica errores
-    struct hist_st *history = malloc_or_exit(sizeof(struct hist_st));
+    struct hist_st *history = malloc_or_exit(sizeof(struct hist_st)); // Asigna memoria para la estructura
     history->arraysize = 10; // Tamaño inicial del array de líneas
-    history->used = 0;       // Inicialmente no hay líneas usadas
-    // Asigna memoria para el array de líneas y verifica errores
-    history->linearray = calloc_or_exit(history->arraysize, sizeof(char *));
+    history->used = 0; // Inicialmente no hay líneas usadas
+    history->linearray = calloc_or_exit(history->arraysize, sizeof(char *)); // Asigna memoria para el array de líneas
 
-    char line[MAXLINE]; // líne del archivo
-    while (fgets(line, sizeof(line), fp))
+    char line[MAXLINE];
+    while (fgets(line, sizeof(line), fp)) // Lee líneas del archivo
     {
-        // Elimina el carácter de nueva línea al final de la línea leída
-        line[strcspn(line, "\n")] = 0;
-        // Añade la línea al historial
-        history_addline(history, line);
+        line[strcspn(line, "\n")] = 0; // Elimina el salto de línea
+        history_agregar(history, line); // Añade la línea al historial
     }
 
-    return history; // Retorna el historial inicializado
+    return history; // Devuelve la estructura de historial
 }
-
-// Añade una línea al historial
-struct hist_st *history_addline(struct hist_st *history, char *line)
+void history_mostrar(struct hist_st *history, size_t n) // Muestra las últimas n líneas del historial
 {
-    // Si el array de líneas está lleno se duplica su tamaño
-    if (history->used == history->arraysize)
-    {
-        history->arraysize *= 2;
-        // Realoca memoria para el array de líneas y verifica errores
-        history->linearray = reallocarray_or_exit(history->linearray, history->arraysize, sizeof(char *));
-    }
-    // Duplica la línea y la añade al array de líneas
-    history->linearray[history->used] = strdup_or_exit(line);
-    history->used++; // Incrementa el contador de líneas usadas
-    return history;  // Retorna el historial actualizado
-}
-
-// Muestra las últimas N líneas del historial
-void history_show(struct hist_st *history, size_t n)
-{
-    // Si N es mayor que el número de líneas usadas se ajusta a este valor
-    if (n > history->used)
+    if (n > history->used) // Ajusta n si es mayor que el número de líneas usadas
     {
         n = history->used;
     }
-    // Imprimir las últimas N líneas del historial
-    for (size_t i = history->used - n; i < history->used; i++)
+    for (size_t i = history->used - n; i < history->used; i++) // Imprime las últimas n líneas
     {
         printf("%s\n", history->linearray[i]);
     }
 }
-
-// Guarda el historial en un archivo
-void history_save(struct hist_st *history, FILE *fp)
+void history_liberar(struct hist_st *history) // Libera la memoria de la estructura de historial
 {
-    // Escribir cada línea del historial en el archivo
-    for (size_t i = 0; i < history->used; i++)
-    {
-        fprintf(fp, "%s\n", history->linearray[i]);
-    }
-}
-
-// Libera la memoria del historial
-void history_free(struct hist_st *history)
-{
-    // Liberar cada línea en el array de líneas
-    for (size_t i = 0; i < history->used; i++)
+    for (size_t i = 0; i < history->used; i++) // Libera cada línea almacenada
     {
         free(history->linearray[i]);
     }
-    // Liberar el array de líneas y la estructura de historial
-    free(history->linearray);
-    free(history);
+    free(history->linearray); // Libera el array de punteros
+    free(history); // Libera la estructura de historial
 }
 
-int builtin_history(int argc, char **argv)
+void history_guardar(struct hist_st *history, FILE *fp) // Guarda el historial en un archivo
 {
-    size_t n = 10; // Valor por defecto
-    if (argc > 1)
+    for (size_t i = 0; i < history->used; i++) // Itera sobre todas las líneas usadas
+    {
+        fprintf(fp, "%s\n", history->linearray[i]); // Escribe cada línea en el archivo
+    }
+}
+
+int builtin_history(int argc, char **argv) // Comando incorporado que muestra el historial
+{
+    size_t n = 10;
+    if (argc > 1) // Si hay un argumento, lo convierte a entero y lo usa como n
     {
         n = atoi(argv[1]);
     }
-    // Mostrar las últimas N líneas del historial
-    history_show(history_session_lines, n);
-    return 0; // Retornar 0 para indicar éxito
+    history_mostrar(history_session_lines, n); // Muestra las últimas n líneas
+    return 0;
+}
+struct hist_st *history_agregar(struct hist_st *history, char *line) // Añade una línea al historial
+{
+    if (history->used == history->arraysize) // Duplica el tamaño del array si está lleno
+    {
+        history->arraysize *= 2;
+        history->linearray = reallocarray_or_exit(history->linearray, history->arraysize, sizeof(char *));
+    }
+    history->linearray[history->used] = strdup_or_exit(line); // Duplica la línea y la almacena
+    history->used++; // Incrementa el contador de líneas usadas
+    return history; // Devuelve la estructura de historial
 }
