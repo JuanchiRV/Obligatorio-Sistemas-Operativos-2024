@@ -1,48 +1,50 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "wrappers.h"
+#include <stdio.h>       // Incluye la biblioteca estándar de entrada/salida
+#include <stdlib.h>      // Incluye funciones de propósito general como malloc, exit, etc.
+#include <string.h>      // Incluye funciones de manipulación de cadenas
+#include "wrappers.h"    // Incluye funciones auxiliares definidas en wrappers.h
 
+// Función que convierte una línea en un arreglo de argumentos
 int
-linea2argv(char *linea, int argc, char **argv)
+line_to_args(char *line, int max_args, char **args)
 {
-    int N = 0; //nuemero de palabras
-    int i = 0;//variable para recorrer la lista
-    int word_starts = -1;//indica si se encontro el principio de una palabra
+    int num_words = 0;       // Número de palabras encontradas
+    int index = 0;           // Índice para recorrer la línea
+    int start_pos = -1;      // Indica el inicio de una palabra
 
-
-    while (N < argc && linea[i] != '\n') {
-
-        if (linea[i] != ' ' && linea[i] != '\t' && word_starts == -1) { //encontre principio de una palabra
-            word_starts = i;//se guarda la posicion de la palabra
+    // Bucle principal para recorrer la línea y separar palabras
+    while (num_words < max_args && line[index] != '\n') {
+        // Encuentra el inicio de una palabra
+        if (line[index] != ' ' && line[index] != '\t' && start_pos == -1) {
+            start_pos = index;  // Guarda la posición inicial de la palabra
         }
 
-        if (linea[i] == ' ' || linea[i] == '\t') { //encontre final de una palabra
-            int str_len = i - word_starts;//se calcula la longitud de la palabra
+        // Encuentra el final de una palabra
+        if (line[index] == ' ' || line[index] == '\t') {
+            int word_length = index - start_pos;  // Calcula la longitud de la palabra
 
-            argv[N] = malloc_or_exit(str_len + 1);//se reserva memoria para la palabra y se guarda en argv
+            args[num_words] = malloc_or_exit(word_length + 1);  // Reserva memoria para la palabra
+            strncpy(args[num_words], &line[start_pos], word_length);  // Copia la palabra en args
+            args[num_words][word_length] = '\0';  // Añade el terminador nulo al final de la palabra
 
-            strncpy(argv[N], &linea[word_starts], str_len);//se copia la palabra en argv
-            argv[N][str_len] = '\0';//se agrega el caracter nulo al final de la palabra
-
-            N++;
-            word_starts = -1;//se reinicia la variable
+            num_words++;
+            start_pos = -1;  // Reinicia la variable
         }
 
-        i++;
-    }
-    if (word_starts != -1) {
-        int str_len = i - word_starts;
-
-        argv[N] = malloc(str_len + 1);
-        strncpy(argv[N], &linea[word_starts], str_len);
-        argv[N][str_len] = '\0';
-
-        N++;
+        index++;
     }
 
-    argv[N] = NULL;
+    // Procesa la última palabra si no terminó en espacio/tabulador
+    if (start_pos != -1) {
+        int word_length = index - start_pos;
 
-    return N;
+        args[num_words] = malloc_or_exit(word_length + 1);  // Reserva memoria para la palabra
+        strncpy(args[num_words], &line[start_pos], word_length);  // Copia la palabra en args
+        args[num_words][word_length] = '\0';  // Añade el terminador nulo al final de la palabra
 
+        num_words++;
+    }
+
+    args[num_words] = NULL;  // Termina la lista de argumentos con NULL
+
+    return num_words;  // Devuelve el número de palabras encontradas
 }
