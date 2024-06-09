@@ -39,4 +39,4 @@ struct builtin_struct builtin_arr[] = {
     { NULL, NULL, NULL } 
 };  
 
-int globalstatret;//para builtin_status
+int globalstatret;//para builtin_status y exit
