@@ -15,14 +15,14 @@ show_user_groups(int arg_count, char **arg_values)
 {
     gid_t main_gid = getgid(); // Obtiene el ID del grupo principal del usuario
     char *user_name = getlogin(); // Obtiene el nombre de usuario del proceso actual
-    fprintf(stderr, "Real GID: %d(%s)\n", (int) main_gid, user_name); // Imprime el ID del grupo principal y el nombre de usuario
+    fprintf(stderr, "GID: %d(%s)\n", (int) main_gid, user_name); // Imprime el ID del grupo principal y el nombre de usuario
 
     gid_t group_array[MAX_GRPS]; // Declara un arreglo para almacenar los IDs de los grupos secundarios
     int group_count = getgroups(MAX_GRPS, group_array); // Obtiene la lista de grupos secundarios del usuario
 
     // Verifica si la llamada a getgroups falló
     if (group_count < 0){
-        error(ERROR, errno, "Error al obtener grupos\n"); // Imprime un mensaje de error
+        error(ERROR, errno, "Error obteniendo grupos\n"); // Imprime un mensaje de error
         return EXIT_FAILURE; // Devuelve un código de error y sale de la función
     }
 
