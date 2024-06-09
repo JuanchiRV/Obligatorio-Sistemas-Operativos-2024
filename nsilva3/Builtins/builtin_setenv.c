@@ -7,7 +7,7 @@ int builtin_setenv(int argc, char **argv)
     if (argc != 3)
     {
         // Si no hay 3 argumentos se imprime el mensaje de error y la forma correcta del comando
-        fprintf(stderr, "Comando incorrecto, prueba escribirlo así: setenv <variable> <valor>\n");
+        fprintf(stderr, "Error en el comando, escribelo así: setenv <variable> <valor>\n");
         return 1; // Retornar 1 para indicar error
     }
 

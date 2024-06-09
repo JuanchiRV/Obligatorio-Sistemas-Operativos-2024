@@ -1,8 +1,8 @@
-/*#include <stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-//#include <pwd.h>
+#include <pwd.h>
 #include "minish.h"
 
 
@@ -14,15 +14,15 @@ builtin_uid(int argc, char **argv)
         ;
     }
     uid_t userid = getuid();//getuid(): Llama a la función del sistema que devuelve el UID del usuario que está ejecutando el programa.
-    struct passwd *user = getpwuid(userid);// Llama a la función del sistema que toma un UID y devuelve un puntero a una estructura passwd que contiene información sobre el usuario.
+    struct passwd *usuario = getpwuid(userid);// Llama a la función del sistema que toma un UID y devuelve un puntero a una estructura passwd que contiene información sobre el usuario.
 //user: Variable que almacena el puntero a la estructura passwd.
-    if (user != NULL){//Imprime un mensaje en stderr con el nombre de usuario (user->pw_name) y el UID (userid).
-        fprintf(stderr, "El ID del usuario %s es: %d\n", user->pw_name, userid);
+    if (usuario != NULL){//Imprime un mensaje en stderr con el nombre de usuario (user->pw_name) y el UID (userid).
+        fprintf(stderr, "ID usuario %s es: %d\n", usuario->pw_name, userid);
         return EXIT_SUCCESS;//Retorna EXIT_SUCCESS (generalmente definido como 0) para indicar que la operación fue exitosa.
     }
     else {
-        printf("No se pudo obtener la información del usuario\n");
+        printf("Error, no se encontro informacion del usuario\n");
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
-}*/
+}

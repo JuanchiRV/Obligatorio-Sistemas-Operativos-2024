@@ -11,16 +11,16 @@
 int builtin_cd(int argc, char **argv) {
     // Si se pasa un argumento al comando cd
     if (argc == 2) {
-        char path[MAXCWD]; // Buffer para almacenar el camino especificado
-        strcpy(path, argv[1]); // Copia el camino especificado en el buffer 'path'
-        char cwd[MAXCWD]; // Buffer para almacenar el directorio actual
+        char camino[MAXCWD]; // Buffer para almacenar el camino especificado
+        strcpy(camino, argv[1]); // Copia el camino especificado en el buffer 'camino'
+        char direct[MAXCWD]; // Buffer para almacenar el directorio actual
         
         // Si el camino especificado no es absoluto
         if (argv[1][0] != '/') {
             // Si el argumento es '-', se cambia al directorio anterior
             if (argv[1][0] == '-') {
-                // Obtiene el directorio actual y lo guarda en 'cwd'
-                if (getcwd(cwd, sizeof(cwd)) == NULL) {
+                // Obtiene el directorio actual y lo guarda en 'direct'
+                if (getcwd(direct, sizeof(direct)) == NULL) {
                     perror("getcwd error"); // Imprime un mensaje de error si getcwd falla
                     return 1; // Retorna 1 indicando error
                 }
@@ -29,32 +29,32 @@ int builtin_cd(int argc, char **argv) {
                     perror("chdir error"); // Imprime un mensaje de error si chdir falla
                     return 1; // Retorna 1 indicando error
                 }
-                setenv("OLDPWD", cwd, 1); // Actualiza OLDPWD con el valor de cwd
+                setenv("OLDPWD", direct, 1); // Actualiza OLDPWD con el valor de direct
                 setenv("PWD", getenv("OLDPWD"), 1); // Actualiza PWD con el valor de OLDPWD
                 return 0; // Retorna 0 indicando éxito
             }
-            // Obtiene el directorio actual y lo guarda en 'cwd'
-            if (getcwd(cwd, sizeof(cwd)) == NULL) {
+            // Obtiene el directorio actual y lo guarda en 'direct'
+            if (getcwd(direct, sizeof(direct)) == NULL) {
                 perror("getcwd error"); // Imprime un mensaje de error si getcwd falla
                 return 1; // Retorna 1 indicando error
             }
-            setenv("OLDPWD", cwd, 1); // Actualiza OLDPWD con el valor de cwd
-            strcat(cwd, "/"); // Añade un separador '/' al final de cwd
-            strcat(cwd, path); // Concatenar el camino relativo al directorio actual
+            setenv("OLDPWD", direct, 1); // Actualiza OLDPWD con el valor de direct
+            strcat(direct, "/"); // Añade un separador '/' al final de direct
+            strcat(direct, camino); // Concatenar el camino relativo al directorio actual
             // Cambia al directorio concatenado (relativo)
-            if (chdir(cwd) != 0) {
+            if (chdir(direct) != 0) {
                 perror("chdir error"); // Imprime un mensaje de error si chdir falla
                 return 1; // Retorna 1 indicando error
             }
-            setenv("PWD", cwd, 1); // Actualiza PWD con el nuevo directorio
+            setenv("PWD", direct, 1); // Actualiza PWD con el nuevo directorio
             return 0; // Retorna 0 indicando éxito
         }
         // Si el camino especificado es absoluto, cambia directamente a ese directorio
-        if (chdir(path) != 0) {
+        if (chdir(camino) != 0) {
             perror("chdir error"); // Imprime un mensaje de error si chdir falla
             return 1; // Retorna 1 indicando error
         }
-        setenv("PWD", path, 1); // Actualiza PWD con el nuevo directorio
+        setenv("PWD", camino, 1); // Actualiza PWD con el nuevo directorio
         return 0; // Retorna 0 indicando éxito
     }
 

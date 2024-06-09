@@ -1,17 +1,16 @@
+#include <stdio.h>
 #include <string.h>
-#include "minish.h"
-#include "wrappers.h"
 #include "minish.c"//no sabemmos cual de los 2 archivos es el correcto
+#include "minish.h"
 
-//builtin_lookup: recibe un comando y decide si pertenece al grupo de comandos builtin o externos.
-//Retorna un puntero a la estructura de ese comando si es un builtin, CC, retorna NULL
-struct builtin_struct *builtin_lookup(char *cmd){//cmd es un punter a cadena de caracteres
-    struct builtin_struct *result;//inicializamos un puntero a una estructura de tipo builtin_struct
-    result = NULL;//inicializamos el puntero a NULL
-    for(int i = 0; builtin_arr[i].cmd != NULL; i++){//se itera sobre el array de builtins, 
-        if(strcmp(builtin_arr[i].cmd, cmd)==0){//Compara la cadena cmd con el campo cmd del i-ésimo elemento de builtin_arr. strcmp devuelve 0 si las cadenas son iguales
-            result = &builtin_arr[i];//se asigna la direccion de la estructura al puntero
+
+// Function to lookup a built-in command
+struct builtin_struct *builtin_lookup(char *cmd) {//declara una funcion llamada que toma un arguemnto cmd, que es un puntero a una cadena de caracteres y decuelve un puntero a una estructura de tipo builtin_struct
+    int num_builtins = sizeof(builtin_arr) / sizeof(struct builtin_struct);//Calcula el número de elementos en el array builtin_arr dividiendo el tamaño total del array por el tamaño de un solo elemento.
+    for (int i = 0; i < num_builtins; i++) {
+        if (strcmp(cmd, builtin_arr[i].cmd) == 0) {//Compara la cadena cmd con el campo cmd del i-ésimo elemento de builtin_arr. strcmp devuelve 0 si las cadenas son iguales.
+            return &builtin_arr[i];//Si las cadenas son iguales, devuelve un puntero al i-ésimo elemento de builtin_arr.
         }
     }
-    return result;//en caso de que no se encuentre, se retorna NULL
+    return NULL;
 }
