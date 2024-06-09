@@ -1,43 +1,93 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <error.h>
-#include <errno.h>
-#include "minish.h"
-#include "wrappers.h"
+#include <string.h>
+#include "../minish.h"
+#include "../wrappers.h"
 
-#define HISTORY_FILE ".minish_history" //el nombre del archivo donde se almacenará el historial de comandos.
-#define MAX_LINE_LENGTH 256 //la longitud máxima de una línea de comando.
-#define ERROR 1
+// Inicializa el historial desde un archivo
+struct hist_st *history_init(FILE *fp)
+{
+    // Asigna memoria para la estructura de historial y verifica errores
+    struct hist_st *history = malloc_or_exit(sizeof(struct hist_st));
+    history->arraysize = 10; // Tamaño inicial del array de líneas
+    history->used = 0;       // Inicialmente no hay líneas usadas
+    // Asigna memoria para el array de líneas y verifica errores
+    history->linearray = calloc_or_exit(history->arraysize, sizeof(char *));
 
-struct deq *history; //Se declara una variable global history que apunta a una estructura deq. Esta variable se utilizará para almacenar el historial de comandos.
+    char line[MAXLINE]; // líne del archivo
+    while (fgets(line, sizeof(line), fp))
+    {
+        // Elimina el carácter de nueva línea al final de la línea leída
+        line[strcspn(line, "\n")] = 0;
+        // Añade la línea al historial
+        history_addline(history, line);
+    }
 
-int builtin_history(int argc, char **argv){
-    int N;
-    if (argc == 1){ //Si no se proporciona ningún argumento, se establece N en 10.
-        N = 10;
-    }else if (argc == 2){
-        N = atoi(argv[1]); //Si se proporciona un argumento, se convierte a un entero (N = atoi(argv[1])
-        if(N == 0){
-            error(0,errno,"ERROR, %s no es un numero valido\n",argv[1]);
-            return 1; //Si el argumento no es un número válido (0), se imprime un mensaje de error y se devuelve un código de error.
-        }
-    }else{
-        perror("ERROR, se han ingresado demasiados argumentos\n");
-        return 1; //Si se proporcionan más de un argumento, se imprime un mensaje de error y se devuelve un código de error.
+    return history; // Retorna el historial inicializado
+}
+
+// Añade una línea al historial
+struct hist_st *history_addline(struct hist_st *history, char *line)
+{
+    // Si el array de líneas está lleno se duplica su tamaño
+    if (history->used == history->arraysize)
+    {
+        history->arraysize *= 2;
+        // Realoca memoria para el array de líneas y verifica errores
+        history->linearray = reallocarray_or_exit(history->linearray, history->arraysize, sizeof(char *));
     }
-    struct node *temp; //Se declara una variable temp que apunta a una estructura node.
-    if (history -> qty < N) { //Se comprueba si la cantidad de elementos en el historial (history->qty) es menor que N
-        temp = history -> first; //Si es así, temp se establece en el primer nodo del historial (history->first).
-    }else{ 
-        temp = history -> last;
-        for (int i = 1; i < N; i++){
-            temp = temp -> prev;
-        } //De lo contrario, temp se establece en el último nodo del historial (history->last) y se retrocede N - 1 veces desde el último nodo.
+    // Duplica la línea y la añade al array de líneas
+    history->linearray[history->used] = strdup_or_exit(line);
+    history->used++; // Incrementa el contador de líneas usadas
+    return history;  // Retorna el historial actualizado
+}
+
+// Muestra las últimas N líneas del historial
+void history_show(struct hist_st *history, size_t n)
+{
+    // Si N es mayor que el número de líneas usadas se ajusta a este valor
+    if (n > history->used)
+    {
+        n = history->used;
     }
-    for (int i = 1; temp != NULL; i++){ //Se recorre la lista enlazada a partir de temp e imprime cada comando del historial junto con su índice.
-        fprintf(stderr,"%d : %s",i, temp -> content);
-        temp = temp -> next ; //El bucle continúa hasta que temp sea NULL.
+    // Imprimir las últimas N líneas del historial
+    for (size_t i = history->used - n; i < history->used; i++)
+    {
+        printf("%s\n", history->linearray[i]);
     }
-    return 0;
+}
+
+// Guarda el historial en un archivo
+void history_save(struct hist_st *history, FILE *fp)
+{
+    // Escribir cada línea del historial en el archivo
+    for (size_t i = 0; i < history->used; i++)
+    {
+        fprintf(fp, "%s\n", history->linearray[i]);
+    }
+}
+
+// Libera la memoria del historial
+void history_free(struct hist_st *history)
+{
+    // Liberar cada línea en el array de líneas
+    for (size_t i = 0; i < history->used; i++)
+    {
+        free(history->linearray[i]);
+    }
+    // Liberar el array de líneas y la estructura de historial
+    free(history->linearray);
+    free(history);
+}
+
+int builtin_history(int argc, char **argv)
+{
+    size_t n = 10; // Valor por defecto
+    if (argc > 1)
+    {
+        n = atoi(argv[1]);
+    }
+    // Mostrar las últimas N líneas del historial
+    history_show(history_session_lines, n);
+    return 0; // Retornar 0 para indicar éxito
 }
