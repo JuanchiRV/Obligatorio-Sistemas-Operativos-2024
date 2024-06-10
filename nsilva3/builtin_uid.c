@@ -6,7 +6,7 @@
 #include "minish.h"
 
 
-int
+extern int
 builtin_uid(int argc, char **argv)
 {
     if(argc == 1 || strcmp(argv[0], "uid") == 0)//Si alguna de estas condiciones es verdadera, la función simplemente continúa sin hacer nada en este bloque (; es una instrucción vacía).

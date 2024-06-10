@@ -1,6 +1,6 @@
 #include <stdlib.h>//para exit
 #include <sys/types.h>//para pid_t, nos genera muchos problemas
-int externo(int argc, char **argv) {//toma un arreglo de argumentos y su cantidad
+extern int externo(int argc, char **argv) {//toma un arreglo de argumentos y su cantidad
     UNUSED(argc);//marca argc como no utilizado para evitar warnings del compilador
 
     pid_t proc_hijo = fork();//fork crea un proceso hijo 

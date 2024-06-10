@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "../minish.h"
 
-int builtin_help(int argc, char **argv)
+extern int builtin_help(int argc, char **argv)
 {
     if (argc == 1)
     {

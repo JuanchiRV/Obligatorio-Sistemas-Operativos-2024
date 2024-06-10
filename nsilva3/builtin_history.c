@@ -4,7 +4,7 @@
 #include "../minish.h"
 #include "../wrappers.h"
 
-struct hist_st *history_inicializar(FILE *fp) // Inicializa la estructura de historial
+extern struct hist_st *history_inicializar(FILE *fp) // Inicializa la estructura de historial
 {
     struct hist_st *history = malloc_or_exit(sizeof(struct hist_st)); // Asigna memoria para la estructura
     history->used = 0; // Inicialmente no hay líneas usadas
@@ -45,7 +45,7 @@ void history_guardar(struct hist_st *history, FILE *fp) // Guarda el historial e
         fprintf(fp, "%s\n", history->linearray[i]); // Escribe cada línea en el archivo
     }
 }
-int builtin_history(int argc, char **argv) // Comando incorporado que muestra el historial
+extern int builtin_history(int argc, char **argv) // Comando incorporado que muestra el historial
 {
     size_t n = 10;
     if (argc > 1) // Si hay un argumento, lo convierte a entero y lo usa como n
@@ -55,7 +55,7 @@ int builtin_history(int argc, char **argv) // Comando incorporado que muestra el
     history_mostrar(history_session_lines, n); // Muestra las últimas n líneas
     return 0;
 }
-struct hist_st *history_agregar(struct hist_st *history, char *line) // Añade una línea al historial
+extern struct hist_st *history_agregar(struct hist_st *history, char *line) // Añade una línea al historial
 {
     if (history->used == history->arraysize) // Duplica el tamaño del array si está lleno
     {

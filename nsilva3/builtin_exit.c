@@ -5,7 +5,7 @@
 
 static int isChar(const void* ptr);
 void save_history(void);
-int
+extern int
 builtin_exit(int argc, char **argv){ //Definición de la función builtin_exit que toma dos argumentos: argc (número de argumentos) y argv (matriz de argumentos).
     save_history(); //Llama a la función save_history para guardar el historial antes de salir.
     if(argc==1){ //Si hay solo un argumento (el nombre del comando), ejecuta el siguiente bloque.

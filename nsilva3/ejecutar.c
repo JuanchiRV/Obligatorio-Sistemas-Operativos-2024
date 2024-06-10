@@ -6,7 +6,7 @@
 /*ejecutar: decide si el argumento en argv[0] pertenece al conjunto de builtins. Si pertenece, lo ejecuta, y sino, intenta ejecutarlo como externo.
 Devuelve el status devuelto por externo o la función del builtin.
 */
-int
+extern int
 ejecutar(int argc, char **argv)
 {
     if(argc == 0)//si no hay argumentos, no se hace nada

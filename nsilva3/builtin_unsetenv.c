@@ -4,7 +4,7 @@
 #include <errno.h>
 #include "minish.h"
 
-int
+extern int
 builtin_unsetenv(int argc, char **argv)
 {
     if(argc==1){ //Si hay solo un argumento (el nombre del comando), ejecuta el siguiente bloque.

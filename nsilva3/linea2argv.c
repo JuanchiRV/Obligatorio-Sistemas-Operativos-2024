@@ -4,7 +4,7 @@
 #include "wrappers.h"    // Incluye funciones auxiliares definidas en wrappers.h
 
 // Función que convierte una línea en un arreglo de argumentos
-int
+extern int
 line_to_args(char *line, int max_args, char **args)
 {
     int num_words = 0;       // Número de palabras encontradas
