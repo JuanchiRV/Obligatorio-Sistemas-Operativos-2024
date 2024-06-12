@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "minish.h"
 
-int builtin_setenv(int argc, char **argv)
+extern int builtin_setenv(int argc, char **argv)
 {
     if (argc != 3)
     {

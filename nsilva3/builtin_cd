@@ -8,7 +8,7 @@
 
 
 
-int builtin_cd(int argc, char **argv) {
+extern int builtin_cd(int argc, char **argv) {
     // Si se pasa un argumento al comando cd
     if (argc == 2) {
         char camino[MAXCWD]; // Buffer para almacenar el camino especificado

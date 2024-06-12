@@ -4,7 +4,7 @@
 #include <errno.h>
 #include "minish.h"
 
-int
+extern int
 builtin_getenv(int argc, char **argv)
 {
     extern char **environ;//environ es una variable global que almacena todas las variables de entorno y sus valores en el formato nombre=valor

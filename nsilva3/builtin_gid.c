@@ -10,7 +10,7 @@
 #define MAX_GRPS 500     // Define el número máximo de grupos que se pueden manejar
 
 // Función que implementa el comando show_user_groups, que muestra el grupo principal y los grupos secundarios del usuario
-int
+extern int
 show_user_groups(int arg_count, char **arg_values)
 {
     gid_t main_gid = getgid(); // Obtiene el ID del grupo principal del usuario
