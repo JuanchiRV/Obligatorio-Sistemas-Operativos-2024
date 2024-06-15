@@ -40,3 +40,27 @@ struct builtin_struct builtin_arr[] = {
 };  
 
 int globalstatret;//para builtin_status y exit
+
+
+int main() {
+    size_t len = 0;             // Variable para almacenar la longitud de la línea, inicializada a 0
+    char *line = NULL;         // Puntero para almacenar la línea de entrada del usuario, inicializado a NULL
+    char *argv[64];             // Arreglo de punteros para almacenar los argumentos de la línea
+    int argc;                   // Número de argumentos
+    while (1) {                 // Bucle infinito para el shell interactivo
+        printf("(minish) %s:%s > ", getenv("USER"), getenv("PWD")); // Imprime el prompt del shell con el usuario y directorio actual
+        if (getline(&line, &len, stdin) == -1) { // Lee una línea de entrada; si hay un error, sale del programa
+            perror("getline");
+            exit(EXIT_FAILURE);
+        }
+        if (strlen(line) > 1) {  // Si la línea no está vacía (más de 1 carácter), la agrega al historial
+            history_agregar(line);
+        }
+        argc = linea2argv(line, 64, argv); // Convierte la línea en una lista de argumentos y obtiene el número de argumentos
+        if (argc > 0) {            // Si hay al menos un argumento, ejecuta el comando
+            ejecutar(argc, argv);
+        }
+    }
+    
+    return 0;                      // Termina la función main y devuelve 0, indicando éxito
+}

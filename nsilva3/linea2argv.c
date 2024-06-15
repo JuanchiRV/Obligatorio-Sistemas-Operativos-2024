@@ -5,7 +5,7 @@
 
 // Función que convierte una línea en un arreglo de argumentos
 extern int
-line_to_args(char *line, int max_args, char **args)
+linea2argv(char *line, int max_args, char **args)
 {
     int num_words = 0;       // Número de palabras encontradas
     int index = 0;           // Índice para recorrer la línea
