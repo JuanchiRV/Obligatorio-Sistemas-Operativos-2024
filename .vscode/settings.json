@@ -2,7 +2,13 @@
     "files.associations": {
         "types.h": "c",
         "unistd.h": "c",
-        "builtin_cd": "c"
+        "builtin_cd": "c",
+        "string.h": "c",
+        "minish.h": "c",
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "errno.h": "c",
+        "wrappers.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

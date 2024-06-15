@@ -1,23 +1,21 @@
-CFILES   = $(wildcard *.c)
-HFILES   = $(wildcard *.h)
-OBJFILES = $(CFILES:.c=.o)
-DEPS     = $(CFILES:.c=.d)
-OUT      = minish
-CFLAGS   = -Wall -Wextra -std=gnu99 -ggdb
+CC = gcc
+CFLAGS = -Wall -Wextra -std=gnu99 -ggdb
+OBJS = minish.o builtins.o linea2argv.o ejecutar.o
 
-# Rule to generate the executable
-$(OUT): $(OBJFILES)
-	$(CC) $(CFLAGS) -o $@ $^
+minish: $(OBJS)
+	$(CC) $(CFLAGS) -o minish $(OBJS)
 
-# Include dependency files
--include $(DEPS)
+minish.o: minish.c minish.h
+	$(CC) $(CFLAGS) -c minish.c
 
-# Rule to compile .c to .o and generate .d files
-%.o: %.c
-	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
+builtins.o: builtins.c minish.h
+	$(CC) $(CFLAGS) -c builtins.c
 
-# Clean rule
-.PHONY: clean
+linea2argv.o: linea2argv.c minish.h
+	$(CC) $(CFLAGS) -c linea2argv.c
+
+ejecutar.o: ejecutar.c minish.h
+	$(CC) $(CFLAGS) -c ejecutar.c
+
 clean:
-	rm -f $(OBJFILES) $(OUT) $(DEPS)
-
+	 rm -f *.o minish
