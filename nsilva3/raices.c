@@ -1,9 +1,7 @@
-include <stdio.h>
-include<math.h>
 #include <stdio.h>
 #include <math.h>
-#define Min1
-#define Max10
+#define MIN 1
+#define MAX 10
 int main() {
     int i;
     
